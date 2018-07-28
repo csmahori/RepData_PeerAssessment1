@@ -4,7 +4,7 @@ output:
   html_document:
     keep_md: true
 ---
-##Loading and preprocessing the data
+## Loading and preprocessing the data
 
 Setting "echo=TRUE" for all code chunks
 ```{r Setting_Global_Options,echo=TRUE}
@@ -12,13 +12,13 @@ library(knitr)
 opts_chunk$set(echo=TRUE)
 ```
 
-###Data Loading
+### Data Loading
 ```{r Data_Loading}
 setwd("C:/Users/user/Desktop/Data Analytics Stuff/Coursera/Reproducible research")
 activity<-read.csv("activity.csv",header=TRUE)
 ```
 
-###Data Processing
+### Data Processing
 Removing NAs
 ```{r Data_Processing}
 act<-!(is.na(activity))
@@ -27,48 +27,48 @@ str(activity0)
 head(activity0)
 ```
 
-##Mean of Total Number of steps taken per day
+## Mean of Total Number of steps taken per day
 
-###Total Number of steps taken per day
+### Total Number of steps taken per day
 ```{r Total_no_of_Steps_per_day}
 library(dplyr)
 activity1<-group_by(activity0,date) %>% summarize(total_steps=sum(steps,na.rm = TRUE))
 head(activity1)
 ```
 
-###Histogram of the total number of steps taken each day
+### Histogram of the total number of steps taken each day
 ```{r Histogram}
 hist(activity1$total_steps,breaks=20,xlab = "Total Number of Steps taken per day",main="Histogram")
 ```
 
-###Mean and Median of total number of steps taken per day
+### Mean and Median of total number of steps taken per day
 ```{r Mean_and_Median}
 mean(activity1$total_steps)
 median(activity1$total_steps)
 ```
 
-##Average daily activity pattern
+## Average daily activity pattern
 
-###1.Time Series Plot(With original data)
+### 1.Time Series Plot(With original data)
 ```{r plot}
 activity2<-group_by(activity0,interval) %>% summarize(avg_no_of_steps=mean(steps))
 plot(activity2$interval,activity2$avg_no_of_steps,xlab="Interval",ylab="Avg Number of steps",type="l")
 ```
 
-###2.Interval which contains on average Maximum Number of steps across all the days.
+### 2.Interval which contains on average Maximum Number of steps across all the days.
 ```{r maximum_point_in_graph}
 plot(activity2$interval,activity2$avg_no_of_steps,xlab="Interval",ylab="Avg Number of steps",type="l")
 abline(v=activity2$interval[which.max(activity2$avg_no_of_steps)])
 ```
 
-##Imputing Missing Values
+## Imputing Missing Values
 
-###1.Total Number of Missing Values in the Dataset
+### 1.Total Number of Missing Values in the Dataset
 ```{r Total_NAs}
 sum(is.na(activity))
 ```
 
-###2.The strategy for filling in all of the missing values in the dataset
+### 2.The strategy for filling in all of the missing values in the dataset
 
 Mean for 5-minute interval is used to fill in the missing values in the dataset
 
@@ -76,7 +76,7 @@ Mean for 5-minute interval is used to fill in the missing values in the dataset
 head(activity2)
 ```
 
-###3.The New imputed Dataset
+### 3.The New imputed Dataset
 ```{r Imputing_Missing_Values}
 activity3<-activity
 for(i in 1:nrow(activity3)){
@@ -88,7 +88,7 @@ head(activity3)
 ```
 
 
-###4.Histogram(Imputed Dataset) of the total number of steps taken each day
+### 4.Histogram(Imputed Dataset) of the total number of steps taken each day
 ```{r Histogram_of_total_number_of_steps_taken_each_day}
 library(dplyr)
 activity4<-group_by(activity3,date) %>% summarize(total_steps=sum(steps))
@@ -96,13 +96,13 @@ head(activity4)
 hist(activity4$total_steps,breaks=20,xlab = "Total Number of Steps taken per day",main="Histogram of the Imputed Data")
 ```
 
-###Mean and Median(Imputed Dataset) of total number of steps taken per day
+### Mean and Median(Imputed Dataset) of total number of steps taken per day
 ```{r Mean_and_Median(Imputed_Dataset)}
 mean(activity4$total_steps)
 median(activity4$total_steps)
 ```
 
-###Comparison between Dataset with missing Values and Dataset with Imputed Data.
+### Comparison between Dataset with missing Values and Dataset with Imputed Data.
 ```{r Comparison_between_means}
 barplot(c(mean(activity1$total_steps),mean(activity4$total_steps)),names.arg=c("Mean of total steps\n(With NAs)","Mean of total steps\n(Imputed data)"),main="Comparison between means of two Datasets",ylim=c(10400,11000))
 ```
@@ -112,9 +112,9 @@ barplot(c(median(activity1$total_steps),mean(activity4$total_steps)),main="Compa
 ```
 
 
-##To check Differences in activity patterns between weekdays and weekends.
+## To check Differences in activity patterns between weekdays and weekends.
 
-###1.New factor variable in the dataset with two levels - "weekday" and "weekend"
+### 1.New factor variable in the dataset with two levels - "weekday" and "weekend"
 ```{r dayType}
 library(chron)
 for(i in 1:nrow(activity3)){
@@ -129,7 +129,7 @@ activity3$daytype<-as.factor(activity3$daytype)
 str(activity3)
 ```
 
-###2.Time Series Plot(on the basis of Day Type)
+### 2.Time Series Plot(on the basis of Day Type)
 ```{r time_series_plot(on_the_basis_of_Day_Type)}
 activity5<-group_by(activity3,interval,daytype) %>% summarize(avg_no_of_steps=mean(steps))
 library(ggplot2)
